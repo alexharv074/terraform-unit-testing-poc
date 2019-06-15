@@ -1,0 +1,11 @@
+{
+  "variables": {
+    "instance_count": 1,
+    "ami": "ami-08589eca6dcc9b39c",
+    "instance_type": "t2.micro",
+    "ebs_block_device": []
+  },
+  "locals": {
+    "key_name": "default"
+  }
+}
