@@ -21,9 +21,3 @@ variable "ebs_block_device" {
   type        = list(map(string))
   default     = []
 }
-
-variable "cpu_credits" {
-  description = "The credit option for CPU usage (unlimited or standard)"
-  type        = string
-  default     = "standard"
-}

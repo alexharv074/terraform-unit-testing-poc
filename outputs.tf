@@ -1,7 +1,6 @@
 locals {
-  this_id     = compact(coalescelist(aws_instance.this[*].id, aws_instance.this_t2[*].id, [""]))
-  this_public_ip = compact(coalescelist(aws_instance.this[*].public_ip, aws_instance.this_t2[*].public_ip, [""]))
-  this_credit_specification = flatten(aws_instance.this_t2[*].credit_specification)
+  this_id     = aws_instance.this[*].id
+  this_public_ip = aws_instance.this[*].public_ip
 }
 
 output "id" {
