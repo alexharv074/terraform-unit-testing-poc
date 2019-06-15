@@ -13,8 +13,3 @@ output "public_ip" {
   description = "List of public IP addresses assigned to the instances, if applicable"
   value       = local.this_public_ip
 }
-
-output "credit_specification" {
-  description = "List of credit specification of instances"
-  value       = local.this_credit_specification
-}
