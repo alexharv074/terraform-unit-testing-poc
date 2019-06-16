@@ -32,16 +32,11 @@ Terraform v0.12.3-dev
 
 ## Usage
 
-### Simplest test case - instance_count 0
+### Testing terraform testing eval manually
 
 ```text
-▶ ~/go/bin/terraform plan
-```
-
-All good.
-
-```text
-▶ ~/go/bin/terraform testing eval . aws_instance.this spec/fixtures/simplest_instance_count_0.json
+▶ export PATH=~/go/bin:$PATH
+▶ terraform testing eval . aws_instance.this spec/fixtures/simplest_instance_count_0.json
 {
   "value": [],
   "type": [
@@ -51,33 +46,22 @@ All good.
 }
 ```
 
-### Simplest test case - instance_count 1
+### Installing Rspec dependencies
+
+Assumes you have:
+
+- Ruby (tested on 2.4.1)
+- RubyGems
+- Bundler
 
 ```text
-▶ ~/go/bin/terraform testing eval . aws_instance.this spec/fixtures/simplest_instance_count_1.json
+▶ bundle install
 ```
 
-Errors out with:
+### Run the suite
 
-```json
-  "diagnostics": [
-    {
-      "severity": "error",
-      "summary": "Unsupported block type",
-      "detail": "Blocks of type \"dynamic\" are not expected here.",
-      "range": {
-        "filename": "main.tf",
-        "start": {
-          "line": 13,
-          "column": 3,
-          "byte": 197
-        },
-        "end": {
-          "line": 13,
-          "column": 10,
-          "byte": 204
-        }
-      }
-    }
-  ]
+```text
+▶ bundle exec rake
 ```
+
+The suite is in [./spec/aws_ec2_instance_spec.rb](./spec/aws_ec2_instance_spec.rb). Supporting Ruby code is in [./spec/spec_helper.rb](./spec/spec_helper.rb).
