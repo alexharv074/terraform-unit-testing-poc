@@ -64,4 +64,25 @@ Assumes you have:
 ▶ bundle exec rake
 ```
 
+Expected output:
+
+```text
+▶ bundle exec rake
+/Users/alexharvey/.rvm/rubies/ruby-2.4.1/bin/ruby -I/Users/alexharvey/.rvm/gems/ruby-2.4.1/gems/rspec-core-3.8.1/lib:/Users/alexharvey/.rvm/gems/ruby-2.4.1/gems/rspec-support-3.8.2/lib /Users/alexharvey/.rvm/gems/ruby-2.4.1/gems/rspec-core-3.8.1/exe/rspec --pattern spec/\*\*\{,/\*/\*\*\}/\*_spec.rb
+
+aws_instance.this
+  with instance_count 0
+    should have be an empty list
+  with no EBS volumes
+    should have AMI ami-08589eca6dcc9b39c
+    should have instance_type t2.micro
+  with an EBS volume
+    should have an ebs_block_device list
+    should have one ebs_block_device
+    device_name should be /dev/sdg
+
+Finished in 5.38 seconds (files took 0.15504 seconds to load)
+6 examples, 0 failures
+```
+
 The suite is in [./spec/aws_ec2_instance_spec.rb](./spec/aws_ec2_instance_spec.rb). Supporting Ruby code is in [./spec/spec_helper.rb](./spec/spec_helper.rb).
