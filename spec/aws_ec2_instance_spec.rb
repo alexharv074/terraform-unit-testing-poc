@@ -40,7 +40,84 @@ describe "aws_instance.this" do
     end
   end
 
-  context "with two EBS volumes" do
+  context "EBS volumes with no block_device" do
+    subject(:r) do
+      TerraformTesting.new.eval(".", "aws_instance.this", {
+        "variables": {
+          "instance_count": 1,
+          "ami": "ami-08589eca6dcc9b39c",
+          "instance_type": "t2.micro",
+          "ebs_block_device": [
+            {"mount_point": "/data"},
+            {"mount_point": "/home"}
+          ]
+        },
+        "locals": {
+          "key_name": "default"
+        }
+      })
+    end
+
+    it "should raise an error" do
+      expect { r }
+        .to raise_error /This map does not have an element with the key.*device_name/
+    end
+  end
+
+  context "EBS volumes with no mount_point" do
+    subject(:r) do
+      TerraformTesting.new.eval(".", "aws_instance.this", {
+        "variables": {
+          "instance_count": 1,
+          "ami": "ami-08589eca6dcc9b39c",
+          "instance_type": "t2.micro",
+          "ebs_block_device": [
+            {"device_name": "/dev/sdg"},
+            {"device_name": "/dev/sdh"}
+          ]
+        },
+        "locals": {
+          "key_name": "default"
+        }
+      })
+    end
+
+    it "should raise an error" do
+      expect { r }
+        .to raise_error /Call to function.*templatefile.*failed.*This map does not have an element with the key.*mount_point/
+    end
+  end
+
+  context "minimal working with 2 EBS volumes" do
+    subject(:r) do
+      TerraformTesting.new.eval(".", "aws_instance.this", {
+        "variables": {
+          "instance_count": 1,
+          "ami": "ami-08589eca6dcc9b39c",
+          "instance_type": "t2.micro",
+          "ebs_block_device": [
+            {
+              "device_name": "/dev/sdg",
+              "mount_point": "/data"
+            },
+            {
+              "device_name": "/dev/sdh",
+              "mount_point": "/home"
+            }
+          ]
+        },
+        "locals": {
+          "key_name": "default"
+        }
+      })[0]
+    end
+
+    it "volume_size should be null" do
+      expect(r.ebs_block_device[0].volume_size).to be_nil
+    end
+  end
+
+  context "complete with 2 EBS volumes" do
     subject(:r) do
       TerraformTesting.new.eval(".", "aws_instance.this", {
         "variables": {
