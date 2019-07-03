@@ -76,13 +76,17 @@ aws_instance.this
   with no EBS volumes
     should have AMI ami-08589eca6dcc9b39c
     should have instance_type t2.micro
-  with an EBS volume
+  with two EBS volumes
     should have an ebs_block_device list
-    should have one ebs_block_device
-    device_name should be /dev/sdg
+    should have two ebs_block_devices
+    device_name 0 should be /dev/sdg
+    user_data
+      should have a mkfs line
+      should have a mkdir line
+      should have a mount line
 
-Finished in 5.38 seconds (files took 0.15504 seconds to load)
-6 examples, 0 failures
+Finished in 8 seconds (files took 0.18005 seconds to load)
+9 examples, 0 failures
 ```
 
 The suite is in [./spec/aws_ec2_instance_spec.rb](./spec/aws_ec2_instance_spec.rb). Supporting Ruby code is in [./spec/spec_helper.rb](./spec/spec_helper.rb).

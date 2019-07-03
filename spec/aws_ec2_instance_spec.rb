@@ -23,8 +23,7 @@ describe "aws_instance.this" do
           "instance_count": 1,
           "ami": "ami-08589eca6dcc9b39c",
           "instance_type": "t2.micro",
-          "ebs_block_device": [],
-          "mount_point": []
+          "ebs_block_device": []
         },
         "locals": {
           "key_name": "default"
@@ -53,20 +52,20 @@ describe "aws_instance.this" do
               "device_name": "/dev/sdg",
               "volume_size": 10,
               "volume_type": "gp2",
-              "delete_on_termination": false
+              "delete_on_termination": false,
+              "mount_point": "/data"
             },
             {
               "device_name": "/dev/sdh",
               "volume_size": 5,
               "volume_type": "gp2",
-              "delete_on_termination": false
-            },
-          ],
-          "mount_point": ["/data", "/home"]
+              "delete_on_termination": false,
+              "mount_point": "/home"
+            }
+          ]
         },
         "locals": {
-          "key_name": "default",
-          "user_data": "xxx"
+          "key_name": "default"
         }
       })[0]
     end
@@ -83,8 +82,19 @@ describe "aws_instance.this" do
       expect(r.ebs_block_device[0].device_name).to eq "/dev/sdg"
     end
 
-    it "should have a user_data script" do
-      expect(r.user_data).to eq "xxx"
+    context 'user_data' do
+      before do
+        @lines = r.user_data.split("\n")
+      end
+      it "should have a mkfs line" do
+        expect(@lines[1]).to match %r{mkfs -t xfs /dev/.*}
+      end
+      it "should have a mkdir line" do
+        expect(@lines[2]).to match %r{mkdir -p /.*}
+      end
+      it "should have a mount line" do
+        expect(@lines[3]).to match %r{mount /.* /.*}
+      end
     end
   end
 end

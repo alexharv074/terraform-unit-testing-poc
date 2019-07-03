@@ -13,6 +13,7 @@ resource "aws_instance" "this" {
   dynamic "ebs_block_device" {
 
     for_each = var.ebs_block_device
+
     content {
 
       device_name = ebs_block_device.value.device_name
@@ -26,9 +27,7 @@ resource "aws_instance" "this" {
     }
   }
 
-  // This doesn't work but would if Terraform had enumerate.
   user_data = templatefile("${path.module}/user-data.sh.tmpl", {
-    ebs_block_device = [for index, x in enumerate(var.ebs_block_device): {
-      merge(x, {mount_point => var.mount_point[index]})
-    }])
+    ebs_block_device = var.ebs_block_device
+  })
 }

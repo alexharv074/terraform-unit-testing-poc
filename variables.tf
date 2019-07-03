@@ -25,18 +25,14 @@ variable "ebs_block_device" {
       volume_size           = 5
       volume_type           = "gp2"
       delete_on_termination = false
+      mount_point           = "/data"
     },
     {
       device_name           = "/dev/sdh"
       volume_size           = 5
       volume_type           = "gp2"
       delete_on_termination = false
+      mount_point           = "/home"
     }
   ]
-}
-
-variable "mount_point" {
-  description = "Mount point to use"
-  type        = list(string)
-  default     = ["/data", "/home"]
 }
