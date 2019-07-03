@@ -11,11 +11,25 @@ class TerraformTesting
   def eval(path, addr, mock_data)
     command = "#{@@terraform} testing eval #{path} #{addr} -"
     stdout, status = Open3.capture2(command, stdin_data: mock_data.to_json)
+
     result_raw = JSON.parse(stdout)
+
+    if result_raw.has_key?('diagnostics')
+      raise_diagnostics(result_raw["diagnostics"])
+    end
+
     return prepare_result(result_raw["value"], result_raw["type"])
   end
 
  private
+
+  def raise_diagnostics(diags)
+    errs = []
+    diags.each do |diag|
+      errs << diag if diag["severity"] == "error"
+    end
+    raise RuntimeError, errs if errs.length > 0
+  end
 
   def prepare_result(value, type)
     if value.nil?
