@@ -1,13 +1,5 @@
 locals {
   key_name = "default"
-  user_data = <<EOT
-#!/usr/bin/env bash
-%{for e in var.ebs_block_device ~}
-mkfs -t xfs ${e.device_name}
-mkdir -p ${e.mount_point}
-mount ${e.device_name} ${e.mount_point}
-%{endfor}
-EOT
 }
 
 resource "aws_instance" "this" {
@@ -38,5 +30,7 @@ resource "aws_instance" "this" {
     }
   }
 
-  user_data = local.user_data
+  user_data = templatefile("${path.module}/user-data.sh.tmpl", {
+    ebs_block_device = var.ebs_block_device
+  })
 }
