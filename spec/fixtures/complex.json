@@ -1,0 +1,26 @@
+{
+  "variables": {
+    "instance_count": 1,
+    "ami": "ami-08589eca6dcc9b39c",
+    "instance_type": "t2.micro",
+    "ebs_block_device": [
+      {
+        "device_name": "/dev/sdg",
+        "volume_size": 10,
+        "volume_type": "gp2",
+        "delete_on_termination": false
+      },
+      {
+        "device_name": "/dev/sdh",
+        "volume_size": 5,
+        "volume_type": "gp2",
+        "delete_on_termination": false
+      }
+    ],
+    "mount_point": ["/data", "/home"]
+  },
+  "locals": {
+    "key_name": "default",
+    "user_data": "xxx"
+  }
+}

@@ -22,4 +22,10 @@ resource "aws_instance" "this" {
       volume_type  = lookup(ebs_block_device.value, "volume_type", null)
     }
   }
+
+  // This doesn't work but would if Terraform had enumerate.
+  user_data = templatefile("${path.module}/user-data.sh.tmpl", {
+    ebs_block_device = [for index, x in enumerate(var.ebs_block_device): {
+      merge(x, {mount_point => var.mount_point[index]})
+    }])
 }

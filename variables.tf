@@ -19,5 +19,24 @@ variable "instance_type" {
 variable "ebs_block_device" {
   description = "Additional EBS block devices to attach to the instance"
   type        = list(map(string))
-  default     = []
+  default = [
+    {
+      device_name           = "/dev/sdg"
+      volume_size           = 5
+      volume_type           = "gp2"
+      delete_on_termination = false
+    },
+    {
+      device_name           = "/dev/sdh"
+      volume_size           = 5
+      volume_type           = "gp2"
+      delete_on_termination = false
+    }
+  ]
+}
+
+variable "mount_point" {
+  description = "Mount point to use"
+  type        = list(string)
+  default     = ["/data", "/home"]
 }

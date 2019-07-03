@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+%{for e in merged ~}
+mkfs -t xfs ${e.device_name}
+mkdir -p ${e.mount_point}
+mount ${e.device_name} ${e.mount_point}
+%{endfor}
