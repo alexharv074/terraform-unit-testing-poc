@@ -12,3 +12,7 @@ output "public_ip" {
   description = "List of public IP addresses assigned to the instances, if applicable"
   value       = local.this_public_ip
 }
+
+output "ebs_volumes" {
+  value = aws_instance.this[*].ebs_block_device[*].device_name
+}
