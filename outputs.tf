@@ -1,5 +1,5 @@
 locals {
-  this_id     = aws_instance.this[*].id
+  this_id        = aws_instance.this[*].id
   this_public_ip = aws_instance.this[*].public_ip
 }
 
