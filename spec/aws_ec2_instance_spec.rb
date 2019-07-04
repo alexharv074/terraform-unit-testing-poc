@@ -112,8 +112,39 @@ describe "aws_instance.this" do
       })[0]
     end
 
+    it "ebs_block_device should have an attribute iops from the provider" do
+      expect(r.ebs_block_device[0].iops).to be_nil
+    end
+
     it "volume_size should be null" do
       expect(r.ebs_block_device[0].volume_size).to be_nil
+    end
+  end
+
+  context "with an unknown EBS volume option" do
+    subject(:r) do
+      TerraformTesting.new.eval(".", "aws_instance.this", {
+        "variables": {
+          "instance_count": 1,
+          "ami": "ami-08589eca6dcc9b39c",
+          "instance_type": "t2.micro",
+          "ebs_block_device": [
+            {
+              "device_name": "/dev/sdg",
+              "mount_point": "/data",
+              "I_am_unknown": "I_am_unknown"
+            }
+          ]
+        },
+        "locals": {
+          "key_name": "default"
+        }
+      })[0]
+    end
+
+    it "unknown attributes passed to ebs_block_device will be ignored unless their method is called" do
+      expect { r }.to_not raise_error
+      expect { r.ebs_block_device[0].I_am_unknown }.to raise_error NoMethodError
     end
   end
 
