@@ -31,6 +31,9 @@ resource "aws_instance" "this" {
   }
 
   user_data = templatefile("${path.module}/user-data.sh.tmpl", {
-    ebs_block_device = var.ebs_block_device
+    merged = [
+      for index, x in var.ebs_block_device:
+      merge(x, {"mount_point" = var.mount_point[index]})
+    ]
   })
 }

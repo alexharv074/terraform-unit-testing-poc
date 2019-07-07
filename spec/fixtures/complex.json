@@ -8,17 +8,16 @@
         "device_name": "/dev/sdg",
         "volume_size": 10,
         "volume_type": "gp2",
-        "delete_on_termination": false,
-        "mount_point": "/data"
+        "delete_on_termination": false
       },
       {
         "device_name": "/dev/sdh",
         "volume_size": 5,
         "volume_type": "gp2",
-        "delete_on_termination": false,
-        "mount_point": "/home"
+        "delete_on_termination": false
       }
     ]
+    "mount_point": ["/data", "/home"]
   },
   "locals": {
     "key_name": "default"

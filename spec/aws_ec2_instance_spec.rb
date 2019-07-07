@@ -24,7 +24,8 @@ describe "aws_instance.this" do
             "instance_count": 1,
             "ami": "ami-08589eca6dcc9b39c",
             "instance_type": "t2.micro",
-            "ebs_block_device": []
+            "ebs_block_device": [],
+            "mount_point": []
           },
           "locals": {
             "key_name": "default"
@@ -54,9 +55,10 @@ describe "aws_instance.this" do
               "ami": "ami-08589eca6dcc9b39c",
               "instance_type": "t2.micro",
               "ebs_block_device": [
-                {"mount_point": "/data"},
-                {"mount_point": "/home"}
-              ]
+                {"volume_size": 5},
+                {"volume_size": 10}
+              ],
+              "mount_point": ["/data", "/home"]
             },
             "locals": {
               "key_name": "default"
@@ -80,7 +82,8 @@ describe "aws_instance.this" do
               "ebs_block_device": [
                 {"device_name": "/dev/sdg"},
                 {"device_name": "/dev/sdh"}
-              ]
+              ],
+              "mount_point": []
             },
             "locals": {
               "key_name": "default"
@@ -90,7 +93,7 @@ describe "aws_instance.this" do
 
         it "should raise an error" do
           expect { subject }
-            .to raise_error /Call to function.*templatefile.*failed.*This map does not have an element with the key.*mount_point/
+            .to raise_error /The given key does not identify an element in this collection value/
         end
       end
 
@@ -102,15 +105,10 @@ describe "aws_instance.this" do
               "ami": "ami-08589eca6dcc9b39c",
               "instance_type": "t2.micro",
               "ebs_block_device": [
-                {
-                  "device_name": "/dev/sdg",
-                  "mount_point": "/data"
-                },
-                {
-                  "device_name": "/dev/sdh",
-                  "mount_point": "/home"
-                }
-              ]
+                {"device_name": "/dev/sdg"},
+                {"device_name": "/dev/sdh"}
+              ],
+              "mount_point": ["/data", "/home"]
             },
             "locals": {
               "key_name": "default"
@@ -137,10 +135,10 @@ describe "aws_instance.this" do
               "ebs_block_device": [
                 {
                   "device_name": "/dev/sdg",
-                  "mount_point": "/data",
                   "I_am_unknown": "I_am_unknown"
                 }
-              ]
+              ],
+              "mount_point": ["/data"]
             },
             "locals": {
               "key_name": "default"
@@ -166,17 +164,16 @@ describe "aws_instance.this" do
                   "device_name": "/dev/sdg",
                   "volume_size": 10,
                   "volume_type": "gp2",
-                  "delete_on_termination": false,
-                  "mount_point": "/data"
+                  "delete_on_termination": false
                 },
                 {
                   "device_name": "/dev/sdh",
                   "volume_size": 5,
                   "volume_type": "gp2",
                   "delete_on_termination": false,
-                  "mount_point": "/home"
                 }
-              ]
+              ],
+              "mount_point": ["/data", "/home"]
             },
             "locals": {
               "key_name": "default"
