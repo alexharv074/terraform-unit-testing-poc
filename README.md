@@ -72,21 +72,33 @@ Expected output:
 
 aws_instance.this
   with instance_count 0
-    should have be an empty list
-  with no EBS volumes
-    should have AMI ami-08589eca6dcc9b39c
-    should have instance_type t2.micro
-  with two EBS volumes
-    should have an ebs_block_device list
-    should have two ebs_block_devices
-    device_name 0 should be /dev/sdg
-    user_data
-      should have a mkfs line
-      should have a mkdir line
-      should have a mount line
+    should be an empty list
+  with instance_count 1
+    with no EBS volumes
+      should have AMI ami-08589eca6dcc9b39c
+      should have instance_type t2.micro
+      should have user_data with just the shebang line
+    with two EBS volumes
+      EBS volumes with no block_device
+        should raise an error
+      EBS volumes with no mount_point
+        should raise an error
+      minimal working with 2 EBS volumes
+        ebs_block_device should have an attribute iops from the provider
+        volume_size should be null
+      with an unknown EBS volume option
+        unknown attributes passed to ebs_block_device will be ignored unless their method is called                                                                   
+      complete with 2 EBS volumes
+        should have an ebs_block_device list
+        should have two ebs_block_devices
+        device_name 0 should be /dev/sdg
+        user_data
+          should have a mkfs line
+          should have a mkdir line
+          should have a mount line
 
-Finished in 8 seconds (files took 0.18005 seconds to load)
-9 examples, 0 failures
+Finished in 13.78 seconds (files took 0.18085 seconds to load)
+15 examples, 0 failures
 ```
 
 The suite is in [./spec/aws_ec2_instance_spec.rb](./spec/aws_ec2_instance_spec.rb). Supporting Ruby code is in [./spec/spec_helper.rb](./spec/spec_helper.rb).
